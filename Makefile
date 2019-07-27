@@ -9,5 +9,5 @@ run: migrate
 	cd kunti && pipenv run python manage.py runserver
 migrate:
 	cd kunti && pipenv run python manage.py migrate
-makemigrations:
+migrations:
 	cd kunti && pipenv run python manage.py makemigrations
