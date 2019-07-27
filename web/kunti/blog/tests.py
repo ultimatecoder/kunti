@@ -115,3 +115,10 @@ class TestPost(APITestCase):
         self.assertTrue(is_post_updated)
         number_of_posts = models.Post.objects.count()
         self.assertEqual(number_of_posts, len(self.posts))
+
+    def test_that_it_is_possible_to_delete_existing_post(self):
+        response = self.client.delete('/posts/1/')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        number_of_posts = models.Post.objects.count()
+        expected_number_of_posts = len(self.posts) - 1
+        self.assertEqual(number_of_posts, expected_number_of_posts)
