@@ -1,0 +1,6 @@
+language: python
+install:
+  make intall
+script:
+  make lint
+  make test
