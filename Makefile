@@ -2,7 +2,7 @@ install:
 	pip install pipenv
 	pipenv install --dev
 lint:
-	flake8 kunti
+	flake8 --exclude=migrations kunti
 test:
 	cd kunti && pipenv run python manage.py test
 run: migrate
