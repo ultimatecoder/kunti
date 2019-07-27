@@ -3,17 +3,13 @@ from rest_framework.test import APITestCase
 
 from blog import models
 from . import dummy
+from . import mocks
 
 
 class TestPost(APITestCase):
 
     def setUp(self):
         self._create_dummy_records()
-
-    def _construct_expected_published_date(self, published_date):
-        expected_published_date = published_date.replace(" ", "T")
-        expected_published_date += 'Z'
-        return expected_published_date
 
     def _create_dummy_records(self):
         self.author = dummy.create_author()
@@ -23,12 +19,9 @@ class TestPost(APITestCase):
         ]
 
     def _serialize_post(self, post):
-        expected_published_date = self._construct_expected_published_date(
-            post.published_date
-        )
         serialized_post = {
             "id": post.id,
-            "published_date": expected_published_date,
+            "published_date": mocks.MockedDateTime.timezoned,
             "author": self.author.id,
             "title": post.title,
             "body": post.body,
