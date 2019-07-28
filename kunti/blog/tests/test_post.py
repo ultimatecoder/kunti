@@ -1,4 +1,5 @@
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
 from blog import models
@@ -10,6 +11,9 @@ class TestPost(APITestCase):
 
     def setUp(self):
         self._create_dummy_records()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Token ' + self.token.key
+        )
 
     def _create_dummy_records(self):
         self.author = dummy.create_author()
@@ -17,6 +21,7 @@ class TestPost(APITestCase):
             dummy.create_post(self.author),
             dummy.create_post(self.author)
         ]
+        self.token = Token.objects.create(user=self.author)
 
     def _serialize_post(self, post):
         serialized_post = {
