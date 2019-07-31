@@ -1,3 +1,4 @@
+from django.contrib.auth import models as auth_models
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
@@ -11,8 +12,11 @@ class TestPost(APITestCase):
 
     def setUp(self):
         self._create_dummy_records()
+        self._add_auth_token_to_header(self.token)
+
+    def _add_auth_token_to_header(self, token):
         self.client.credentials(
-            HTTP_AUTHORIZATION='Token ' + self.token.key
+            HTTP_AUTHORIZATION='Token ' + token.key
         )
 
     def _create_dummy_records(self):
@@ -86,3 +90,34 @@ class TestPost(APITestCase):
         number_of_posts = models.Post.objects.count()
         expected_number_of_posts = len(self.posts) - 1
         self.assertEqual(number_of_posts, expected_number_of_posts)
+
+    def test_that_only_authors_are_allowed_to_delete_their_posts(self):
+        another_author = auth_models.User.objects.create(
+            username="zakir",
+            password="12345",
+            email="zakir@gmail.com",
+            first_name="Zakir",
+            last_name="Ul-haq"
+        )
+        token = Token.objects.create(user=another_author)
+        self._add_auth_token_to_header(token)
+        response = self.client.delete("/posts/1/")
+        self.assertEqual(
+            response.status_code, status.HTTP_403_FORBIDDEN
+        )
+
+    def test_that_everyone_is_allowed_to_read_each_others_blog_post(self):
+        another_author = auth_models.User.objects.create(
+            username="zakir",
+            password="12345",
+            email="zakir@gmail.com",
+            first_name="Zakir",
+            last_name="Ul-haq"
+        )
+        token = Token.objects.create(user=another_author)
+        self._add_auth_token_to_header(token)
+        response = self.client.get("/posts/1/")
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK
+        )
+
