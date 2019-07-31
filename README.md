@@ -1,3 +1,5 @@
+![Travis build status](https://travis-ci.com/ultimatecoder/kunti.svg?branch=master)
+
 # Kunti 👸
 
 A simple yet powerful ReST API for managing micro blogs ✍️
