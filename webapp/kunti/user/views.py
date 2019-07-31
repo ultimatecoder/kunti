@@ -1,5 +1,5 @@
-from rest_framework import mixins, viewsets
 from django.contrib.auth import models
+from rest_framework import mixins, viewsets
 
 from user import serializers
 

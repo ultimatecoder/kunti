@@ -26,7 +26,7 @@ class TestUser(APITestCase):
             "first_name": "Abhilash",
             "last_name": "Sharma"
         }
-        response = self.client.post("/users/", user)
+        response = self.client.post("/signup/", user)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         is_user_created = models.User.objects.filter(
             username=user['username'],
@@ -55,7 +55,3 @@ class TestUser(APITestCase):
             'password': 'i am pass'
         })
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_that_user_is_able_to_logout(self):
-        response = self.client.post('/logout/', {})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)

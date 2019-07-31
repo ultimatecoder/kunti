@@ -9,7 +9,7 @@ from user import views
 
 
 router = DefaultRouter()
-router.register(r'users', views.UserCreateViewSet)
+router.register(r'signup', views.UserCreateViewSet)
 
 
 urlpatterns = [
