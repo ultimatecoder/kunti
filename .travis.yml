@@ -2,7 +2,6 @@ language: python
 before_install: cd webapp
 install:
   make install
-before_script: cd webapp
 script:
   - make lint
   - make test
