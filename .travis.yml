@@ -1,6 +1,6 @@
 language: python
 install:
-  make install
+  - cd webapp && make install
 script:
-  - make lint
-  - make test
+  - cd webapp && make lint
+  - cd webapp && make test
