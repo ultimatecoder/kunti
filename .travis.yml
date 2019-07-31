@@ -1,6 +1,8 @@
 language: python
+before_install: cd project
 install:
-  - cd webapp && make install
+  make install
+before_script: cd project
 script:
-  - cd webapp && make lint
-  - cd webapp && make test
+  - make lint
+  - make test
