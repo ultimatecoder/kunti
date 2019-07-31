@@ -18,12 +18,30 @@ class TestUser(APITestCase):
         )
         self.user.save()
 
-    def test_that_it_is_possible_to_get_token(self):
+    def test_that_user_is_able_to_signup(self):
+        user = {
+            "username": "abhilash",
+            "password": "12345",
+            "email": "abhilash@gmail.com",
+            "first_name": "Abhilash",
+            "last_name": "Sharma"
+        }
+        response = self.client.post("/signup/", user)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        is_user_created = models.User.objects.filter(
+            username=user['username'],
+            email=user['email'],
+            first_name=user['first_name'],
+            last_name=user['last_name']
+        )
+        self.assertTrue(is_user_created)
+
+    def test_that_user_is_able_to_login_when_details_are_correct(self):
         with mock.patch(
             "rest_framework.authtoken.serializers.authenticate"
         ) as mocked_authenticate:
             mocked_authenticate.return_value = self.user
-            response = self.client.post("/token/", {
+            response = self.client.post("/login/", {
                 'username': self.user.username,
                 'password': self.user.password
             })
@@ -31,8 +49,8 @@ class TestUser(APITestCase):
         token = Token.objects.all()[0]
         self.assertDictEqual(response.data, {"token": token.key})
 
-    def test_that_getting_token_is_not_possible_with_wrong_details(self):
-        response = self.client.post("/token/", {
+    def test_that_user_not_able_to_login_when_details_are_wrong(self):
+        response = self.client.post("/login/", {
             'username': 'random-user',
             'password': 'i am pass'
         })
