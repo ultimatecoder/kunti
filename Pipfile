@@ -11,6 +11,7 @@ django = "*"
 djangorestframework = "*"
 drf-yasg = "*"
 packaging = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
